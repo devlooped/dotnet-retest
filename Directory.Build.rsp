@@ -1,0 +1,6 @@
+# See https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-response-files
+-nr:false
+-m:1
+-v:m
+-clp:Summary;ForceNoAlign
+-l:trx
