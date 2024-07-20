@@ -54,8 +54,8 @@
 	weak
 [file ".github/workflows/includes.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/includes.yml
-	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
-	etag = e5ee22e115c925fb85ec931cda3ac811fcc453c03904554fa3f573935b221d34
+	sha = d152e7437fd0d6f6d9363d23cb3b78c07335ea49
+	etag = ec40db34f379d0c6d83b2ec15624f330318a172cc4f85b5417c63e86eaf601df
 	weak
 [file ".github/workflows/publish.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
@@ -74,8 +74,8 @@
 	weak
 [file "Directory.Build.rsp"]
 	url = https://github.com/devlooped/oss/blob/main/Directory.Build.rsp
-	sha = a75b141696469a08a5690fed9433d41cfbac1077
-	etag = 4ca5cb069b08db5de966e081e2c4b96e3b6a030680d98f1d9ae5f3305e87bfc3
+	sha = 0f7f7f7e8a29de9b535676f75fe7c67e629a5e8c
+	etag = 0ccae83fc51f400bfd7058170bfec7aba11455e24a46a0d7e6a358da6486e255
 	weak
 [file "_config.yml"]
 	url = https://github.com/devlooped/oss/blob/main/_config.yml
@@ -101,4 +101,19 @@
 	url = https://github.com/devlooped/oss/blob/main/src/Directory.Build.targets
 	sha = 33a20db26e47589769284817b271ce67ea9ccfd8
 	etag = 1a3a0151b5771ee97ed8351254ff4c18a0ff568e0df5c33c6830f069bfbb067b
+	weak
+[file "src/dotnet-retest/TrxCommand.cs"]
+	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/TrxCommand.cs
+	sha = 6560601f955e3aede0b810573a6ca301e78ecc3c
+	etag = d346b900f3dbba1236654eb4903147b3d9befa42e2a85eee841eea46767c55d1
+	weak
+[file "src/dotnet-retest/Process.cs"]
+	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/Process.cs
+	sha = 8385c4a7355e472f4a94939a5da5ea47cc43b4a3
+	etag = d36430441b9b7d4f444707afb6434665c4a38204da5fab6ca298cd8382b9d684
+	weak
+[file "src/dotnet-retest/Extensions.cs"]
+	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/Extensions.cs
+	sha = 59102327ff8db52de1d7487d53e6bfef5891b5cd
+	etag = 422d00a9218315f8f53d34a3a16d4cd1001fe71042bc9e04cd5439f62f3cce0b
 	weak

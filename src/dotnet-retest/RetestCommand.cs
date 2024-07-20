@@ -1,0 +1,245 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using CliWrap;
+using CliWrap.Buffered;
+using Devlooped.Web;
+using Mono.Options;
+using NuGet.Packaging;
+using Spectre.Console.Cli;
+using static Spectre.Console.AnsiConsole;
+
+namespace Devlooped;
+
+public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
+{
+    record TestResult(string FullName, bool Failed);
+
+    public override async Task<int> ExecuteAsync(CommandContext context, RetestSettings settings)
+    {
+        string? path = null;
+        string? logger = null;
+
+        var args = context.Remaining.Raw.ToList();
+        // A typical mistake would be to pass dotnet test args directly without the -- separator
+        // so account for this automatically so users fall in the pit of success
+        if (args.Count == 0)
+        {
+            foreach (var key in context.Remaining.Parsed)
+            {
+                foreach (var value in key)
+                {
+                    // Revert multiple --key [value] into multiple --key --value
+                    args.Add(key.Key);
+                    if (value != null)
+                        args.Add(value);
+                }
+            }
+        }
+
+        new OptionSet
+        {
+            { "l|logger=", v => logger = v },
+            { "results-directory=", v => path = v },
+        }.Parse(args);
+
+        var trx = new TrxCommand.TrxSettings
+        {
+            Path = path,
+            Output = settings.Output,
+            Skipped = settings.Skipped,
+            GitHubComment = settings.GitHubComment,
+            GitHubSummary = settings.GitHubSummary,
+        };
+
+        if (trx.Path == null)
+        {
+            trx.Path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            args.Insert(0, "--results-directory");
+            args.Insert(1, trx.Path);
+        }
+
+        if (logger != null && !logger.StartsWith("trx"))
+        {
+            WriteLine($"[red]Error:[/] Unsupported logger {logger}. Use 'trx' or omit entirely.");
+            return -1;
+        }
+        else if (logger == null)
+        {
+            args.Insert(0, "--logger");
+            args.Insert(1, "trx");
+        }
+
+        Debug.Assert(DotnetMuxer.Path != null);
+
+        var failed = new HashSet<string>();
+        var attempts = 0;
+        BufferedCommandResult? runFailure = null;
+
+        var exitCode = await Status().StartAsync("Running tests...", async ctx =>
+        {
+            while (true)
+            {
+                attempts++;
+                // Ensure we don't build on retries after initial attempt, 
+                // just in case --no-build was't passed in the original command.
+                if (attempts > 1 && !args.Contains("--no-build"))
+                    args.Insert(0, "--no-build");
+
+                if (failed.Count > 0)
+                    ctx.Status = $"Running tests, attempt #{attempts} (failed: {failed.Count})...";
+                else
+                    ctx.Status = $"Running tests, attempt #{attempts}...";
+
+                var exit = await RunTestsAsync(DotnetMuxer.Path.FullName, new List<string>(args), failed);
+                if (exit.ExitCode == 0)
+                    return 0;
+
+                if (!HasTestExpr().IsMatch(exit.StandardOutput))
+                {
+                    runFailure = exit;
+                    return exit.ExitCode;
+                }
+
+                if (attempts >= settings.Attempts)
+                    return exit.ExitCode;
+
+                var outcomes = GetTestResults(trx.Path);
+                // On first attempt, we just batch add all failed tests
+                if (attempts == 1)
+                {
+                    failed.AddRange(outcomes.Where(x => x.Value == true).Select(x => x.Key));
+                }
+                else
+                {
+                    // Remove from failed the tests that are no longer failed in this attempt
+                    failed.RemoveWhere(x => outcomes.TryGetValue(x, out var isFailed) && !isFailed);
+                }
+            }
+        });
+
+        if (runFailure != null)
+        {
+            MarkupLine($"[red]Error:[/] Failed to run tests.");
+            WriteLine(runFailure.StandardOutput);
+        }
+
+        if (Directory.Exists(trx.Path))
+        {
+            new TrxCommand().Execute(context, new TrxCommand.TrxSettings
+            {
+                GitHubComment = settings.GitHubComment,
+                GitHubSummary = settings.GitHubSummary,
+                Output = settings.Output,
+                Path = trx.Path,
+                Skipped = settings.Skipped,
+                Recursive = false,
+            });
+        }
+
+        return exitCode;
+    }
+
+    Dictionary<string, bool> GetTestResults(string path)
+    {
+        var outcomes = new Dictionary<string, bool>();
+        if (!Directory.Exists(path))
+            return outcomes;
+
+        var ids = new HashSet<string>();
+
+        // Process from newest files to oldest so that newest result we find (by test id) is the one we keep
+        // NOTE: we always emit results to a given directory, so we don't need to search for trx files in subdirectories
+        foreach (var trx in Directory.EnumerateFiles(path, "*.trx", SearchOption.TopDirectoryOnly).OrderByDescending(File.GetLastWriteTime))
+        {
+            using var file = File.OpenRead(trx);
+            // Clears namespaces
+            var doc = HtmlDocument.Load(file, new HtmlReaderSettings { CaseFolding = Sgml.CaseFolding.None });
+            foreach (var result in doc.CssSelectElements("UnitTestResult"))
+            {
+                var id = result.Attribute("testId")!.Value;
+                // Process only once per test id, this avoids duplicates when multiple trx files are processed
+                if (ids.Add(id))
+                {
+                    var isFailed = result.Attribute("outcome")?.Value == "Failed";
+                    var method = doc.CssSelectElement($"UnitTest[id={id}] TestMethod");
+                    Debug.Assert(method != null);
+                    outcomes.Add($"{method.Attribute("className")?.Value}.{method.Attribute("name")?.Value}", isFailed);
+                }
+            }
+        }
+
+        return outcomes;
+    }
+
+    async Task<BufferedCommandResult> RunTestsAsync(string dotnet, List<string> args, IEnumerable<string> failed)
+    {
+        var testArgs = string.Join(" ", args);
+        var finalArgs = args;
+        var filter = string.Join('|', failed.Select(failed => $"FullyQualifiedName~{failed}"));
+        if (filter.Length > 0)
+        {
+            testArgs = $"--filter \"{filter}\" {testArgs}";
+            finalArgs.InsertRange(0, ["--filter", filter]);
+        }
+
+        finalArgs.Insert(0, "test");
+
+        var result = await Cli.Wrap(dotnet)
+            .WithArguments(finalArgs)
+            .WithWorkingDirectory(Directory.GetCurrentDirectory())
+            .WithValidation(CommandResultValidation.None)
+            .ExecuteBufferedAsync();
+
+        return result;
+    }
+
+    [GeneratedRegex(":.*VSTEST.*:")]
+    private static partial Regex HasTestExpr();
+
+    public class RetestSettings : CommandSettings
+    {
+        [Description("Maximum attempts to run tests")]
+        [CommandOption("--attempts")]
+        [DefaultValue(5)]
+        public int Attempts { get; init; } = 5;
+
+        #region trx
+
+        [Description("Include test output in report")]
+        [CommandOption("--trx-output")]
+        [DefaultValue(false)]
+        public bool Output { get; init; }
+
+        /// <summary>
+        /// Whether to include skipped tests in the output.
+        /// </summary>
+        [Description("Include skipped tests in report")]
+        [CommandOption("--trx-skipped")]
+        [DefaultValue(true)]
+        public bool Skipped { get; init; } = true;
+
+        /// <summary>
+        /// Report as GitHub PR comment.
+        /// </summary>
+        [Description("Report as GitHub PR comment")]
+        [CommandOption("--trx-gh-comment")]
+        [DefaultValue(true)]
+        public bool GitHubComment { get; init; } = true;
+
+        /// <summary>
+        /// Report as GitHub PR comment.
+        /// </summary>
+        [Description("Report as GitHub step summary")]
+        [CommandOption("--trx-gh-summary")]
+        [DefaultValue(true)]
+        public bool GitHubSummary { get; init; } = true;
+
+        #endregion
+    }
+}
