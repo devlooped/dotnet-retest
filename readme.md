@@ -14,7 +14,7 @@ test results, integrating also with GitHub PR comments just like [dotnet-trx](ht
 
 ![PR comment](https://raw.githubusercontent.com/devlooped/dotnet-trx/main/assets/img/comment.png)
 
-Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]`:
+Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]` (with optional `--attempts` which defaults to `5`):
 
 ```yml
     - name: 🧪 test
@@ -23,7 +23,7 @@ Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]`:
         dotnet retest -- --no-build [other test options and args]
 ```
 
-![PR comment](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/comment.png)
+![PR comment](https://raw.githubusercontent.com/devlooped/dotnet-trx/main/assets/img/comment.png)
 
 > NOTE: this behavior is triggered by the presence of the `GITHUB_REF_NAME` and `CI` environment variables.
 
