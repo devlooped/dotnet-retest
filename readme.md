@@ -10,9 +10,9 @@
 Runs `dotnet test` with retries for failed tests automatically, and pretty-prints aggregated 
 test results, integrating also with GitHub PR comments just like [dotnet-trx](https://github.com/devlooped/dotnet-trx).
 
-![Demo](https://raw.githubusercontent.com/devlooped/dotnet-trx/main/assets/img/demo.png)
+![Demo](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/ciretry.png)
 
-![PR comment](https://raw.githubusercontent.com/devlooped/dotnet-trx/main/assets/img/comment.png)
+![PR comment](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/comment.png)
 
 Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]` (with optional `--attempts` which defaults to `5`):
 
