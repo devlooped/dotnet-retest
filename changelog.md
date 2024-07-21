@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.2.0](https://github.com/devlooped/dotnet-retest/tree/v0.2.0) (2024-07-21)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.1.0...v0.2.0)
+
+:sparkles: Implemented enhancements:
+
+- Take into account duplicate FQN from theories [\#6](https://github.com/devlooped/dotnet-retest/pull/6) (@kzu)
+
 ## [v0.1.0](https://github.com/devlooped/dotnet-retest/tree/v0.1.0) (2024-07-21)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/cc678481a604157a20545f0a37a4fe7e119a77b3...v0.1.0)
