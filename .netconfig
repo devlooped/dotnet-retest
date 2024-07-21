@@ -34,9 +34,7 @@
 	weak
 [file ".github/workflows/build.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
-	sha = 65f89e06ed7b2ac33ed3b729adc865b7076840d8
-	etag = 20ef46203325f5b3d06a991f8b38c24bcea49fd74d39062a62003448e2dd8b0a
-	weak
+	skip
 [file ".github/workflows/changelog.config"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.config
 	sha = 055a8b7c94b74ae139cce919d60b83976d2a9942
@@ -59,9 +57,7 @@
 	weak
 [file ".github/workflows/publish.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
-	sha = 40ee833a83d843c242914599e2635ca9a05aa837
-	etag = 105db682c332b2bb0873e60a7d2da45b00fe7d83da0f0e7dbf9a84bc5be77c25
-	weak
+    skip
 [file ".github/workflows/test/action.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/test/action.yml
 	sha = 9a1b07589b9bde93bc12528e9325712a32dec418
