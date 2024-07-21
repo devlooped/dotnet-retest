@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Devlooped;
 using NuGet.Configuration;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
 using Spectre.Console;
-using Devlooped;
 using Spectre.Console.Cli;
-using System.Diagnostics;
 using Spectre.Console.Cli.Help;
-using System.Collections.Generic;
 using Spectre.Console.Rendering;
 
 var app = new CommandApp<RetestCommand>();

@@ -18,8 +18,8 @@ public class UnitTest1
     public void FailsTwice()
     {
         var attempt = int.Parse(
-            File.Exists("failstwice.txt") ? 
-            File.ReadAllText("failstwice.txt") : 
+            File.Exists("failstwice.txt") ?
+            File.ReadAllText("failstwice.txt") :
             "0");
 
         if (attempt < 2)
