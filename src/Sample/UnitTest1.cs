@@ -2,6 +2,14 @@ namespace Sample;
 
 public class UnitTest1
 {
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public void Test1(int value)
+    {
+        Assert.True(value > 0);
+    }
+
     [Fact]
     public void FailsOnce()
     {

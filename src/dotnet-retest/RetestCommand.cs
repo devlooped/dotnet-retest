@@ -170,7 +170,13 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                     var isFailed = result.Attribute("outcome")?.Value == "Failed";
                     var method = doc.CssSelectElement($"UnitTest[id={id}] TestMethod");
                     Debug.Assert(method != null);
-                    outcomes.Add($"{method.Attribute("className")?.Value}.{method.Attribute("name")?.Value}", isFailed);
+                    // NOTE: we may have duplicate test FQN due to theories, which we'd run again in this case.
+                    // Eventually, we might want to figure out how to filter theories in a cross-framework compatible 
+                    // way, but for now, filtering by FQN should be enough, even if not 100% optimal.
+                    var fqn = $"{method.Attribute("className")?.Value}.{method.Attribute("name")?.Value}";
+                    if (!outcomes.TryGetValue(fqn, out var wasFailed) || !wasFailed)
+                        // Only change the outcome if it was not already failed
+                        outcomes[fqn] = isFailed;
                 }
             }
         }
