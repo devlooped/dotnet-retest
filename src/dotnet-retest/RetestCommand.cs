@@ -216,7 +216,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         #region trx
 
         [Description("Include test output in report")]
-        [CommandOption("--trx-output")]
+        [CommandOption("--output")]
         [DefaultValue(false)]
         public bool Output { get; init; }
 
@@ -224,7 +224,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         /// Whether to include skipped tests in the output.
         /// </summary>
         [Description("Include skipped tests in report")]
-        [CommandOption("--trx-skipped")]
+        [CommandOption("--skipped")]
         [DefaultValue(true)]
         public bool Skipped { get; init; } = true;
 
@@ -232,7 +232,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         /// Report as GitHub PR comment.
         /// </summary>
         [Description("Report as GitHub PR comment")]
-        [CommandOption("--trx-gh-comment")]
+        [CommandOption("--gh-comment")]
         [DefaultValue(true)]
         public bool GitHubComment { get; init; } = true;
 
@@ -240,7 +240,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         /// Report as GitHub PR comment.
         /// </summary>
         [Description("Report as GitHub step summary")]
-        [CommandOption("--trx-gh-summary")]
+        [CommandOption("--gh-summary")]
         [DefaultValue(true)]
         public bool GitHubSummary { get; init; } = true;
 
