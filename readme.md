@@ -1,10 +1,10 @@
 ![Icon](assets/32.png) dotnet retest
 ============
 
-[![Version](https://img.shields.io/nuget/vpre/dotnet-retest.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-retest)
-[![Downloads](https://img.shields.io/nuget/dt/dotnet-retest.svg?color=green)](https://www.nuget.org/packages/dotnet-retest)
-[![License](https://img.shields.io/github/license/devlooped/dotnet-retest.svg?color=blue)](https://github.com//devlooped/dotnet-retest/blob/main/license.txt)
-[![Build](https://github.com/devlooped/dotnet-retest/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-retest/actions)
+[![Version](https://img.shields.io/nuget/v/dotnet-retest?color=royalblue)](https://www.nuget.org/packages/dotnet-retest)
+[![Downloads](https://img.shields.io/nuget/dt/dotnet-retest)](https://www.nuget.org/packages/dotnet-retest)
+[![License](https://img.shields.io/github/license/devlooped/dotnet-retest?color=blue)](https://github.com//devlooped/dotnet-retest/blob/main/license.txt)
+[![Build](https://img.shields.io/github/actions/workflow/status/devlooped/dotnet-retest/build.yml?branch=main)](https://github.com/devlooped/dotnet-retest/actions)
 
 <!-- #content -->
 Runs `dotnet test` with retries for failed tests automatically, and pretty-prints aggregated 
