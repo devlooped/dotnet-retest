@@ -100,7 +100,8 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                 if (exit.ExitCode == 0)
                     return 0;
 
-                if (!HasTestExpr().IsMatch(exit.StandardOutput))
+                if (!HasTestExpr().IsMatch(exit.StandardOutput) &&
+                    !HasTestSummaryExpr().IsMatch(exit.StandardOutput))
                 {
                     runFailure = exit;
                     return exit.ExitCode;
@@ -201,6 +202,9 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
     [GeneratedRegex(":.*VSTEST.*:")]
     private static partial Regex HasTestExpr();
+
+    [GeneratedRegex("Failed:.*Passed:.*Skipped:.*Total:.*")]
+    private static partial Regex HasTestSummaryExpr();
 
     public class RetestSettings : CommandSettings
     {
