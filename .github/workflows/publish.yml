@@ -29,8 +29,12 @@ jobs:
       - name: 🙏 build
         run: dotnet build -m:1 -bl:build.binlog
 
+      - name: ⚙ install
+        working-directory: bin
+        run: dotnet tool update -g dotnet-retest --prerelease --add-source .
+
       - name: 🧪 test
-        uses: ./.github/workflows/test
+        run: dotnet retest -- ./src/Sample/
 
       - name: 🐛 logs
         uses: actions/upload-artifact@v3
