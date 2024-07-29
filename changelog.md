@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.2.3](https://github.com/devlooped/dotnet-retest/tree/v0.2.3) (2024-07-29)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.2.2...v0.2.3)
+
 ## [v0.2.2](https://github.com/devlooped/dotnet-retest/tree/v0.2.2) (2024-07-29)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.2.1...v0.2.2)
