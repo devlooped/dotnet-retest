@@ -58,11 +58,6 @@
 [file ".github/workflows/publish.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
     skip
-[file ".github/workflows/test/action.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/test/action.yml
-	sha = 9a1b07589b9bde93bc12528e9325712a32dec418
-	etag = b54216ac431a83ce5477828d391f02046527e7f6fffd21da1d03324d352c3efb
-	weak
 [file ".gitignore"]
 	url = https://github.com/devlooped/oss/blob/main/.gitignore
 	sha = 02811fa23b0a102b9b33048335d41e515bf75737
@@ -100,8 +95,8 @@
 	weak
 [file "src/dotnet-retest/TrxCommand.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/TrxCommand.cs
-	sha = 6560601f955e3aede0b810573a6ca301e78ecc3c
-	etag = d346b900f3dbba1236654eb4903147b3d9befa42e2a85eee841eea46767c55d1
+	sha = ea8010ff06abc0cf8b183579a9fcc248afc6b528
+	etag = 82b154bd7bdc5a83a8f568a1a737ebfbc5af57935a77e2033082b839bde99883
 	weak
 [file "src/dotnet-retest/Process.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/Process.cs
