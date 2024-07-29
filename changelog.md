@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.2.2](https://github.com/devlooped/dotnet-retest/tree/v0.2.2) (2024-07-29)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.2.1...v0.2.2)
+
+:sparkles: Implemented enhancements:
+
+- Bring fix for test error markup rendering [\#10](https://github.com/devlooped/dotnet-retest/pull/10) (@kzu)
+
 ## [v0.2.1](https://github.com/devlooped/dotnet-retest/tree/v0.2.1) (2024-07-29)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.2.0...v0.2.1)
