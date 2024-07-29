@@ -414,12 +414,12 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
         else
             details.AppendLine("csharp");
 
-        foreach (var line in lines)
+        foreach (var line in lines.Select(x => x.EscapeMarkup()))
         {
             var match = ParseFile().Match(line);
             if (!match.Success)
             {
-                cli.AppendLine(line.EscapeMarkup());
+                cli.AppendLine(line);
                 details.AppendLineIndented(line, "> ");
                 continue;
             }
