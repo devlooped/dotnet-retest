@@ -11,6 +11,7 @@ using CliWrap.Buffered;
 using Devlooped.Web;
 using Mono.Options;
 using NuGet.Packaging;
+using Spectre.Console;
 using Spectre.Console.Cli;
 using static Spectre.Console.AnsiConsole;
 
@@ -81,45 +82,83 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         var attempts = 0;
         BufferedCommandResult? runFailure = null;
 
-        var exitCode = await Status().StartAsync("Running tests...", async ctx =>
+        var ci = Environment.GetEnvironmentVariable("CI") == "true";
+
+        ProgressColumn[] columns = ci ?
+            [new TaskDescriptionColumn { Alignment = Justify.Left }] :
+            [new SpinnerColumn(), new ElapsedTimeColumn(), new TaskDescriptionColumn { Alignment = Justify.Left }];
+
+        // 11 = spinner + elapsed time + padding
+        var maxwith = AnsiConsole.Console.Profile.Width - 11;
+
+        var exitCode = await Progress()
+            .Columns(columns)
+            .StartAsync(async ctx =>
         {
             while (true)
             {
                 attempts++;
-                // Ensure we don't build on retries after initial attempt, 
-                // just in case --no-build was't passed in the original command.
-                if (attempts > 1 && !args.Contains("--no-build"))
-                    args.Insert(0, "--no-build");
-
-                if (failed.Count > 0)
-                    ctx.Status = $"Running tests, attempt #{attempts} (failed: {failed.Count})...";
-                else
-                    ctx.Status = $"Running tests, attempt #{attempts}...";
-
-                var exit = await RunTestsAsync(DotnetMuxer.Path.FullName, new List<string>(args), failed);
-                if (exit.ExitCode == 0)
-                    return 0;
-
-                if (!HasTestExpr().IsMatch(exit.StandardOutput) &&
-                    !HasTestSummaryExpr().IsMatch(exit.StandardOutput))
+                var task = ctx.AddTask($"Running tests, attempt #{attempts}");
+                try
                 {
-                    runFailure = exit;
-                    return exit.ExitCode;
+                    task.StartTask();
+
+                    // Ensure we don't build on retries after initial attempt, 
+                    // just in case --no-build was't passed in the original command.
+                    if (attempts > 1 && !args.Contains("--no-build"))
+                        args.Insert(0, "--no-build");
+
+                    var prefix = failed.Count > 0 ?
+                        $"Running {failed.Count} tests, attempt [yellow]#{attempts}[/]" :
+                        $"Running tests, attempt #{attempts}";
+
+                    task.Description = prefix;
+
+                    var exit = await RunTestsAsync(DotnetMuxer.Path.FullName, new List<string>(args), failed, new Progress<string>(line =>
+                    {
+                        if (ci)
+                        {
+                            WriteLine(line);
+                        }
+                        else if (line.Trim() is { Length: > 0 } description)
+                        {
+                            task.Description = prefix + $": [grey]{description.Substring(0, Math.Min(maxwith - prefix.Length, description.Length))}...[/]";
+                        }
+                    }));
+
+                    if (exit.ExitCode == 0)
+                    {
+                        task.Description = prefix + " :check_mark_button:";
+                        return 0;
+                    }
+
+                    task.Description = prefix + " :cross_mark:";
+
+                    if (!HasTestExpr().IsMatch(exit.StandardOutput) &&
+                        !HasTestSummaryExpr().IsMatch(exit.StandardOutput))
+                    {
+                        runFailure = exit;
+                        return exit.ExitCode;
+                    }
+
+                    if (attempts >= settings.Attempts)
+                        return exit.ExitCode;
+
+                    var outcomes = GetTestResults(trx.Path);
+                    // On first attempt, we just batch add all failed tests
+                    if (attempts == 1)
+                    {
+                        failed.AddRange(outcomes.Where(x => x.Value == true).Select(x => x.Key));
+                    }
+                    else
+                    {
+                        // Remove from failed the tests that are no longer failed in this attempt
+                        failed.RemoveWhere(x => outcomes.TryGetValue(x, out var isFailed) && !isFailed);
+                    }
                 }
-
-                if (attempts >= settings.Attempts)
-                    return exit.ExitCode;
-
-                var outcomes = GetTestResults(trx.Path);
-                // On first attempt, we just batch add all failed tests
-                if (attempts == 1)
+                finally
                 {
-                    failed.AddRange(outcomes.Where(x => x.Value == true).Select(x => x.Key));
-                }
-                else
-                {
-                    // Remove from failed the tests that are no longer failed in this attempt
-                    failed.RemoveWhere(x => outcomes.TryGetValue(x, out var isFailed) && !isFailed);
+                    task.StopTask();
                 }
             }
         });
@@ -184,7 +223,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         return outcomes;
     }
 
-    async Task<BufferedCommandResult> RunTestsAsync(string dotnet, List<string> args, IEnumerable<string> failed)
+    async Task<BufferedCommandResult> RunTestsAsync(string dotnet, List<string> args, IEnumerable<string> failed, IProgress<string> progress)
     {
         var testArgs = string.Join(" ", args);
         var finalArgs = args;
@@ -201,6 +240,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             .WithArguments(finalArgs)
             .WithWorkingDirectory(Directory.GetCurrentDirectory())
             .WithValidation(CommandResultValidation.None)
+            .WithStandardOutputPipe(PipeTarget.ToDelegate(progress.Report))
             .ExecuteBufferedAsync();
 
         return result;
