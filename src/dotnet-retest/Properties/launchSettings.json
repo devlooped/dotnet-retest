@@ -2,8 +2,8 @@
   "profiles": {
     "dotnet-retest": {
       "commandName": "Project",
-      "commandLineArgs": "-- ..\\Samples",
-      "workingDirectory": "C:\\Code\\dotnet-retest\\src\\dotnet-retest"
+      "commandLineArgs": "-- ..\\Sample\\Sample.csproj",
+      "workingDirectory": "."
     }
   }
 }
