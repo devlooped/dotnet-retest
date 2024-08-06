@@ -5,6 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Devlooped</RootNamespace>
     <AssemblyName>retest</AssemblyName>
+    <NoWarn>CS9107</NoWarn>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
 
     <PackageId>dotnet-retest</PackageId>
