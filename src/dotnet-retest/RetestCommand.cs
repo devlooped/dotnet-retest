@@ -23,9 +23,6 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
     public override async Task<int> ExecuteAsync(CommandContext context, RetestSettings settings)
     {
-        string? path = null;
-        string? logger = null;
-
         var args = context.Remaining.Raw.ToList();
         // A typical mistake would be to pass dotnet test args directly without the -- separator
         // so account for this automatically so users fall in the pit of success
@@ -43,9 +40,12 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             }
         }
 
+        string? path = null;
+        var hastrx = false;
+
         new OptionSet
         {
-            { "l|logger=", v => logger = v },
+            { "l|logger=", v => hastrx = v.StartsWith("trx") },
             { "results-directory=", v => path = v },
         }.Parse(args);
 
@@ -65,12 +65,8 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             args.Insert(1, trx.Path);
         }
 
-        if (logger != null && !logger.StartsWith("trx"))
-        {
-            WriteLine($"[red]Error:[/] Unsupported logger {logger}. Use 'trx' or omit entirely.");
-            return -1;
-        }
-        else if (logger == null)
+        // Ensure we add the trx logger. Note that there can be other loggers too
+        if (!hastrx)
         {
             args.Insert(0, "--logger");
             args.Insert(1, "trx");
