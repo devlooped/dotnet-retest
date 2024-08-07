@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CliWrap;
@@ -43,10 +44,16 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         string? path = null;
         var hastrx = false;
+        var hasconsole = false;
 
         new OptionSet
         {
-            { "l|logger=", v => hastrx = v.StartsWith("trx") },
+            { "l|logger=", v =>
+                {
+                    hastrx = v.StartsWith("trx");
+                    hasconsole = v.StartsWith("console");
+                }
+            },
             { "results-directory=", v => path = v },
         }.Parse(args);
 
@@ -66,6 +73,16 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             args.Insert(1, trx.Path);
         }
 
+        var ci = Environment.GetEnvironmentVariable("CI") == "true";
+
+        // Ensure we add the console logger to get more detailed progress in non-CI environments
+        // Limiting to Windows which is what I personally tested. Linux fails with multiple loggers too.
+        if (!hasconsole && !ci && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            args.Insert(0, "--logger");
+            args.Insert(1, "console;verbosity=normal");
+        }
+
         // Ensure we add the trx logger. Note that there can be other loggers too
         if (!hastrx)
         {
@@ -79,14 +96,9 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         var attempts = 0;
         BufferedCommandResult? runFailure = null;
 
-        var ci = Environment.GetEnvironmentVariable("CI") == "true";
-
         ProgressColumn[] columns = ci ?
             [new TaskDescriptionColumn { Alignment = Justify.Left }] :
             [new SpinnerColumn(), new ElapsedTimeColumn(), new MultilineTaskDescriptionColumn()];
-
-        // 11 = spinner + elapsed time + padding
-        var maxwith = AnsiConsole.Console.Profile.Width - 11;
 
         var exitCode = await Progress()
             .Columns(columns)
@@ -115,11 +127,11 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                     {
                         if (ci)
                         {
-                            WriteLine(line);
+                            WriteLine(line.EscapeMarkup());
                         }
                         else if (line.Trim() is { Length: > 0 } description)
                         {
-                            task.Description = prefix + $": [grey]{description.Substring(0, Math.Min(maxwith - prefix.Length, description.Length))}...[/]";
+                            task.Description = prefix + $": [grey]{description.EscapeMarkup()}[/]";
                         }
                     }));
 
