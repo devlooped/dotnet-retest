@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.6.0](https://github.com/devlooped/dotnet-retest/tree/v0.6.0) (2024-08-07)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.5.0...v0.6.0)
+
+:sparkles: Implemented enhancements:
+
+- Rename attempts to retries [\#19](https://github.com/devlooped/dotnet-retest/pull/19) (@kzu)
+
 ## [v0.5.0](https://github.com/devlooped/dotnet-retest/tree/v0.5.0) (2024-08-07)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.4.1...v0.5.0)
