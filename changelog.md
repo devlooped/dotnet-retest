@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.5.0](https://github.com/devlooped/dotnet-retest/tree/v0.5.0) (2024-08-07)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.4.1...v0.5.0)
+
+:sparkles: Implemented enhancements:
+
+- Add ouctome column and screenshots [\#18](https://github.com/devlooped/dotnet-retest/pull/18) (@kzu)
+
 ## [v0.4.1](https://github.com/devlooped/dotnet-retest/tree/v0.4.1) (2024-08-07)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.4.0...v0.4.1)
