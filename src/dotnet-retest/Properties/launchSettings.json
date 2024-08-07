@@ -2,8 +2,8 @@
   "profiles": {
     "dotnet-retest": {
       "commandName": "Project",
-      "commandLineArgs": "-- ..\\Sample\\Sample.csproj --logger \"html;logfilename=testResults.html\" --results-directory bin",
-      "workingDirectory": "."
+      "commandLineArgs": "",
+      "workingDirectory": "..\\Sample"
     }
   }
 }
