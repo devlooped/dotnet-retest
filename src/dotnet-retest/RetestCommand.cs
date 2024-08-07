@@ -107,7 +107,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         ProgressColumn[] columns = ci ?
             [new TaskDescriptionColumn { Alignment = Justify.Left }] :
-            [new SpinnerColumn(), new ElapsedTimeColumn(), new MultilineTaskDescriptionColumn()];
+            [new OutcomeSpinnerColumn(), new ElapsedTimeColumn(), new MultilineTaskDescriptionColumn()];
 
         var exitCode = await Progress()
             .Columns(columns)
@@ -144,13 +144,13 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                         }
                     }));
 
-                    if (exit.ExitCode == 0)
-                    {
-                        task.Description = prefix + " :check_mark_button:";
-                        return 0;
-                    }
+                    // By setting the exit code to the task, the OutcomeSpinnerColumn can render appropately
+                    task.Value = exit.ExitCode;
+                    // Restore description without last progress (if any)
+                    task.Description = prefix;
 
-                    task.Description = prefix + " :cross_mark:";
+                    if (exit.ExitCode == 0)
+                        return 0;
 
                     if (!HasTestExpr().IsMatch(exit.StandardOutput) &&
                         !HasTestSummaryExpr().IsMatch(exit.StandardOutput))
@@ -318,6 +318,22 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             return new Markup(task.Description ?? string.Empty)
                 .Overflow(Overflow.Ellipsis)
                 .Justify(Justify.Left);
+        }
+    }
+
+    class OutcomeSpinnerColumn : ProgressColumn
+    {
+        readonly SpinnerColumn spinner = new();
+
+        public override IRenderable Render(RenderOptions options, ProgressTask task, TimeSpan deltaTime)
+        {
+            if (!task.IsFinished)
+                return spinner.Render(options, task, deltaTime);
+
+            if (task.Value == 0)
+                return new Markup(":check_mark_button:");
+            else
+                return new Markup(":cross_mark:");
         }
     }
 }

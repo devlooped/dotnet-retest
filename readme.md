@@ -12,6 +12,14 @@ test results, integrating also with GitHub PR comments just like [dotnet-trx](ht
 
 ![Demo](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/ciretry.png)
 
+When running locally, it provides live progress on each run:
+
+![Demo](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/progress.png)
+
+and timing and outcome for each attempt:
+
+![Demo](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/timings.png)
+
 Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]` (with optional `--attempts` which defaults to `5`):
 
 ```yml
