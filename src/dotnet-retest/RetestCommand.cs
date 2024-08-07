@@ -45,6 +45,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         string? path = null;
         var hastrx = false;
         var hasconsole = false;
+        var haslogger = false;
 
         new OptionSet
         {
@@ -52,10 +53,18 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                 {
                     hastrx = v.StartsWith("trx");
                     hasconsole = v.StartsWith("console");
+                    haslogger = true;
                 }
             },
             { "results-directory=", v => path = v },
         }.Parse(args);
+
+        // In non-Windows OSes, the trx logger must be the only one if specified
+        if (haslogger && !hastrx && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            MarkupLine("[red]If a logger is specified, it can only be trx in non-Windows platforms.[/]");
+            return 1;
+        }
 
         var trx = new TrxCommand.TrxSettings
         {
