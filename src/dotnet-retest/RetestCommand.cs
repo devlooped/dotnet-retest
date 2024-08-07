@@ -13,6 +13,7 @@ using Mono.Options;
 using NuGet.Packaging;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Rendering;
 using static Spectre.Console.AnsiConsole;
 
 namespace Devlooped;
@@ -82,7 +83,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         ProgressColumn[] columns = ci ?
             [new TaskDescriptionColumn { Alignment = Justify.Left }] :
-            [new SpinnerColumn(), new ElapsedTimeColumn(), new TaskDescriptionColumn { Alignment = Justify.Left }];
+            [new SpinnerColumn(), new ElapsedTimeColumn(), new MultilineTaskDescriptionColumn()];
 
         // 11 = spinner + elapsed time + padding
         var maxwith = AnsiConsole.Console.Profile.Width - 11;
@@ -287,5 +288,15 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         public bool GitHubSummary { get; init; } = true;
 
         #endregion
+    }
+
+    class MultilineTaskDescriptionColumn : ProgressColumn
+    {
+        public override IRenderable Render(RenderOptions options, ProgressTask task, TimeSpan deltaTime)
+        {
+            return new Markup(task.Description ?? string.Empty)
+                .Overflow(Overflow.Ellipsis)
+                .Justify(Justify.Left);
+        }
     }
 }
