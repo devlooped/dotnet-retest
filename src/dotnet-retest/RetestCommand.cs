@@ -117,6 +117,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             {
                 attempts++;
                 var task = ctx.AddTask($"Running tests, attempt #{attempts}");
+
                 try
                 {
                     task.StartTask();
@@ -126,9 +127,9 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                     if (attempts > 1 && !args.Contains("--no-build"))
                         args.Insert(0, "--no-build");
 
-                    var prefix = failed.Count > 0 ?
-                        $"Running {failed.Count} tests, attempt [yellow]#{attempts}[/]" :
-                        $"Running tests, attempt #{attempts}";
+                    var prefix = attempts == 1 ?
+                        $"Running tests" :
+                        $"Retrying {failed.Count} failed test{(failed.Count > 1 ? "s" : "")}";
 
                     task.Description = prefix;
 
@@ -272,10 +273,18 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
     public class RetestSettings : CommandSettings
     {
+        [Description("Maximum retries when re-running failed tests")]
+        [CommandOption("--retries")]
+        [DefaultValue(3)]
+        public int Retries
+        {
+            get => Attempts - 1;
+            init => Attempts = value + 1;
+        }
+
         [Description("Maximum attempts to run tests")]
-        [CommandOption("--attempts")]
-        [DefaultValue(5)]
-        public int Attempts { get; init; } = 5;
+        [CommandOption("--attempts", IsHidden = true)]
+        public int Attempts { get; init; }
 
         #region trx
 
