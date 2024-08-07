@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.4.1](https://github.com/devlooped/dotnet-retest/tree/v0.4.1) (2024-08-07)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.4.0...v0.4.1)
+
+:sparkles: Implemented enhancements:
+
+- Don't allow non-trx logger on non-Windows OS [\#17](https://github.com/devlooped/dotnet-retest/pull/17) (@kzu)
+- Make progress description column multiline [\#16](https://github.com/devlooped/dotnet-retest/pull/16) (@kzu)
+- Increase console verbosity to get better progress [\#15](https://github.com/devlooped/dotnet-retest/pull/15) (@kzu)
+
 ## [v0.4.0](https://github.com/devlooped/dotnet-retest/tree/v0.4.0) (2024-08-06)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.3.0...v0.4.0)
