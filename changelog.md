@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.4.0](https://github.com/devlooped/dotnet-retest/tree/v0.4.0) (2024-08-06)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.3.0...v0.4.0)
+
+:sparkles: Implemented enhancements:
+
+- Allow for extra loggers in addition to trx [\#14](https://github.com/devlooped/dotnet-retest/pull/14) (@kzu)
+- Improve progress reporting by showing output [\#13](https://github.com/devlooped/dotnet-retest/pull/13) (@kzu)
+
 ## [v0.3.0](https://github.com/devlooped/dotnet-retest/tree/v0.3.0) (2024-07-31)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.2.3...v0.3.0)
