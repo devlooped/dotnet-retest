@@ -25,6 +25,9 @@ public class UnitTest1
     [Fact]
     public void FailsTwice()
     {
+        // Add random delay to simulate actual test execution
+        Thread.Sleep(Random.Shared.Next(1000, 5000));
+
         var attempt = int.Parse(
             File.Exists("failstwice.txt") ?
             File.ReadAllText("failstwice.txt") :
