@@ -95,8 +95,8 @@
 	weak
 [file "src/dotnet-retest/TrxCommand.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/TrxCommand.cs
-	sha = b3022d21ff5bcd0abdd39c28369d81503a9a0a09
-	etag = 37e2d94cad94e4becb80c0dc2770a9ee6a797e9b0df35684b05b46042bdc67f9
+	sha = e2817844b7a87ca5492d984711dc2ce84f58377e
+	etag = 629a31f3489e663ef439c5887f39b92594589d3447bc1e47fe91f2c24337de34
 	weak
 [file "src/dotnet-retest/Process.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/Process.cs

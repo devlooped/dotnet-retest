@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Devlooped.Web;
 using Humanizer;
-using NuGet.Common;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using static Devlooped.Process;
@@ -22,7 +21,6 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
 {
     const string Header = "<!-- header -->";
     const string Footer = "<!-- footer -->";
-    const string Signature = "<!-- trx -->";
 
     static string Author =>
         $"from [{ThisAssembly.Project.PackageId}]({ThisAssembly.Project.PackageProjectUrl}) v{ThisAssembly.Project.Version} on {RuntimeInformation.FrameworkDescription} with [:purple_heart:](https://github.com/sponsors/devlooped)";
@@ -78,6 +76,9 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
 
     public override int Execute(CommandContext context, TrxSettings settings)
     {
+        if (Environment.GetEnvironmentVariable("RUNNER_DEBUG") == "1")
+            WriteLine(JsonSerializer.Serialize(new { settings }, new JsonSerializerOptions { WriteIndented = true }));
+
         var path = settings.Path ?? Directory.GetCurrentDirectory();
         if (!Path.IsPathFullyQualified(path))
             path = Path.Combine(Directory.GetCurrentDirectory(), path);
@@ -375,8 +376,7 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
         }
 
         if (settings.GitHubSummary &&
-            Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY") is { Length: > 0 } summaryPath &&
-            File.Exists(summaryPath))
+            Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY") is { Length: > 0 } summaryPath)
         {
             File.AppendAllText(summaryPath,
                 AppendBadges(summary, new(), elapsed, jobUrl)
