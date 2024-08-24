@@ -111,7 +111,7 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
             // Process from newest files to oldest so that newest result we find (by test id) is the one we keep
             foreach (var trx in Directory.EnumerateFiles(path, "*.trx", search).OrderByDescending(File.GetLastWriteTime))
             {
-                ctx.Status($"Discovering test results in {Path.GetFileName(trx)}...");
+                ctx.Status($"Discovering test results in {Path.GetFileName(trx).EscapeMarkup()}...");
                 using var file = File.OpenRead(trx);
                 // Clears namespaces
                 var doc = HtmlDocument.Load(file, new HtmlReaderSettings { CaseFolding = Sgml.CaseFolding.None });
