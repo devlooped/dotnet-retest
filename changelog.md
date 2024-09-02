@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.6.3](https://github.com/devlooped/dotnet-retest/tree/v0.6.3) (2024-09-02)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.6.2...v0.6.3)
+
+:sparkles: Implemented enhancements:
+
+- Add a way to opt-out of the summary [\#31](https://github.com/devlooped/dotnet-retest/pull/31) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- Improve style disable when NO\_COLOR [\#30](https://github.com/devlooped/dotnet-retest/pull/30) (@kzu)
+
 ## [v0.6.2](https://github.com/devlooped/dotnet-retest/tree/v0.6.2) (2024-08-24)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.6.1...v0.6.2)
