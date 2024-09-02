@@ -31,8 +31,9 @@ app.Configure(config =>
     config.SetApplicationName("dotnet retest");
     config.SetApplicationVersion(ThisAssembly.Project.Version);
 
-    if (Environment.GetEnvironmentVariables().Contains("NO_COLOR"))
-        config.Settings.HelpProviderStyles = null;
+    if (Environment.GetEnvironmentVariables().Contains("NO_COLOR") &&
+        config.Settings.HelpProviderStyles?.Options is { } options)
+        options.DefaultValue = Style.Plain;
 });
 
 if (args.Contains("--version"))
