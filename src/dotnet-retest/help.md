@@ -1,4 +1,4 @@
-```shell
+﻿```shell
 USAGE:
     dotnet retest [OPTIONS] [-- [dotnet test options]]
 
