@@ -39,9 +39,10 @@
     <ProjectProperty Include="PackageProjectUrl" />
   </ItemGroup>
 
-  <Target Name="RenderHelp" AfterTargets="Build">
+  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true'">
     <WriteLinesToFile Lines="```shell" Overwrite="true" File="help.md" />
-    <Exec Command="dotnet run --no-build -- --help &gt;&gt; help.md" EnvironmentVariables="NO_COLOR=true" ContinueOnError="true" />
+    <Exec Command="dotnet run --no-build -- --help &gt;&gt; help.md"
+          EnvironmentVariables="NO_COLOR=true" />
     <WriteLinesToFile Lines="```" Overwrite="false" File="help.md" />
   </Target>
 
