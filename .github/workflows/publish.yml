@@ -43,11 +43,12 @@ jobs:
           name: logs
           path: '*.binlog'
 
-      - name: 🚀 nuget
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        if: env.NUGET_API_KEY != ''
-        run: dotnet nuget push ./bin/**/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate
+      - name: ⬆️ upload
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkg
+          path: bin/*
 
       - name: 🚀 sleet
         env:
@@ -56,3 +57,9 @@ jobs:
         run: |
           dotnet tool install -g --version 4.0.18 sleet 
           sleet push bin --config none -f --verbose -p "SLEET_FEED_CONTAINER=nuget" -p "SLEET_FEED_CONNECTIONSTRING=${{ secrets.SLEET_CONNECTION }}" -p "SLEET_FEED_TYPE=azure" || echo "No packages found"
+
+      - name: 🚀 nuget
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        if: env.NUGET_API_KEY != ''
+        run: dotnet nuget push ./bin/**/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate
