@@ -188,7 +188,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             WriteLine(runFailure.StandardOutput);
         }
 
-        if (Directory.Exists(trx.Path))
+        if (settings.NoSummary != true && Directory.Exists(trx.Path))
         {
             new TrxCommand().Execute(context, new TrxCommand.TrxSettings
             {
@@ -285,6 +285,11 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         [Description("Maximum attempts to run tests")]
         [CommandOption("--attempts", IsHidden = true)]
         public int Attempts { get; init; }
+
+        [Description("Whether to emit a summary to console/GitHub")]
+        [CommandOption("--no-summary")]
+        [DefaultValue(false)]
+        public bool NoSummary { get; init; }
 
         #region trx
 
