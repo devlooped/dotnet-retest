@@ -8,8 +8,13 @@
 
 - Add a way to opt-out of the summary [\#31](https://github.com/devlooped/dotnet-retest/pull/31) (@kzu)
 
+:hammer: Other:
+
+- Command option to disable trx output [\#29](https://github.com/devlooped/dotnet-retest/issues/29)
+
 :twisted_rightwards_arrows: Merged:
 
+- Ensure readme is encoded in UTF-8 [\#33](https://github.com/devlooped/dotnet-retest/pull/33) (@kzu)
 - Improve style disable when NO\_COLOR [\#30](https://github.com/devlooped/dotnet-retest/pull/30) (@kzu)
 
 ## [v0.6.2](https://github.com/devlooped/dotnet-retest/tree/v0.6.2) (2024-08-24)
