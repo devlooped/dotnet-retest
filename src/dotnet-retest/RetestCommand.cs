@@ -111,6 +111,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         var exitCode = await Progress()
             .Columns(columns)
+            .AutoRefresh(!ci)
             .StartAsync(async ctx =>
         {
             while (true)
@@ -132,6 +133,10 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                         $"Retrying {failed.Count} failed test{(failed.Count > 1 ? "s" : "")}";
 
                     task.Description = prefix;
+                    if (ci)
+                    {
+                        ctx.Refresh();
+                    }
 
                     var exit = await RunTestsAsync(DotnetMuxer.Path.FullName, new List<string>(args), failed, new Progress<string>(line =>
                     {
