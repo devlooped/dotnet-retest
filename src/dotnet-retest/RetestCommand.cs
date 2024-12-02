@@ -137,7 +137,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                     {
                         if (ci)
                         {
-                            WriteLine(line.EscapeMarkup());
+                            System.Console.WriteLine(line);
                         }
                         else if (line.Trim() is { Length: > 0 } description)
                         {
