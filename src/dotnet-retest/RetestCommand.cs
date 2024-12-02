@@ -264,6 +264,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             .WithArguments(finalArgs)
             .WithWorkingDirectory(Directory.GetCurrentDirectory())
             .WithValidation(CommandResultValidation.None)
+            .WithStandardErrorPipe(PipeTarget.ToDelegate(progress.Report))
             .WithStandardOutputPipe(PipeTarget.ToDelegate(progress.Report))
             .ExecuteBufferedAsync();
 
