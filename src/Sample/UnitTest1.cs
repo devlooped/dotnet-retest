@@ -42,4 +42,13 @@ public class UnitTest1
         // Succeeds
         File.Delete("failstwice.txt");
     }
+
+    public static IEnumerable<object[]> GetNumbers() => Enumerable.Range(0, 1100).Select(x => new object[] { x });
+
+    [Theory]
+    [MemberData(nameof(GetNumbers))]
+    public void NumberIsPositive(int value)
+    {
+        Assert.True(value >= 0);
+    }
 }
