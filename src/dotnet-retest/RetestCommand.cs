@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.Buffered;
@@ -15,6 +14,7 @@ using NuGet.Packaging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;
+using static Devlooped.TrxCommand;
 using static Spectre.Console.AnsiConsole;
 
 namespace Devlooped;
@@ -66,11 +66,11 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             return 1;
         }
 
-        var trx = new TrxCommand.TrxSettings
+        var trx = new TrxSettings
         {
             Path = path ?? Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")),
             Output = settings.Output,
-            Skipped = settings.Skipped,
+            Verbosity = settings.Verbosity,
             GitHubComment = settings.GitHubComment,
             GitHubSummary = settings.GitHubSummary,
         };
@@ -304,12 +304,34 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         public bool Output { get; init; }
 
         /// <summary>
+        /// Output verbosity.
+        /// </summary>
+        [Description(
+            """
+            Output display verbosity:
+            - quiet: only failed tests are displayed
+            - normal: failed and skipped tests are displayed
+            - verbose: failed, skipped and passed tests are displayed
+            """)]
+        [CommandOption("-v|--verbosity")]
+        [DefaultValue(Verbosity.Quiet)]
+        public Verbosity Verbosity { get; set; } = Verbosity.Quiet;
+
+        /// <summary>
         /// Whether to include skipped tests in the output.
         /// </summary>
         [Description("Include skipped tests in report")]
-        [CommandOption("--skipped")]
+        [CommandOption("--skipped", IsHidden = true)]
         [DefaultValue(true)]
-        public bool Skipped { get; init; } = true;
+        public bool Skipped
+        {
+            get => Verbosity != Verbosity.Quiet;
+            set
+            {
+                if (!value)
+                    Verbosity = Verbosity.Quiet;
+            }
+        }
 
         /// <summary>
         /// Report as GitHub PR comment.
