@@ -68,16 +68,23 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         var trx = new TrxCommand.TrxSettings
         {
-            Path = path,
+            Path = path ?? Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")),
             Output = settings.Output,
             Skipped = settings.Skipped,
             GitHubComment = settings.GitHubComment,
             GitHubSummary = settings.GitHubSummary,
         };
 
-        if (trx.Path == null)
+        if (trx.Validate() is { Successful: false } result)
         {
-            trx.Path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            MarkupLine($"[red]Invalid trx settings: {result.Message}[/]");
+            return 1;
+        }
+
+        if (path == null)
+        {
+            // We always ensure the final dotnet test call has a valid path. So 
+            // if we didn't get one from args, we need to add it here.
             args.Insert(0, "--results-directory");
             args.Insert(1, trx.Path);
         }
@@ -158,8 +165,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                     if (exit.ExitCode == 0)
                         return 0;
 
-                    if (!HasTestExpr().IsMatch(exit.StandardOutput) &&
-                        !HasTestSummaryExpr().IsMatch(exit.StandardOutput))
+                    if (!exit.StandardOutput.Contains(trx.Path))
                     {
                         runFailure = exit;
                         return exit.ExitCode;
@@ -269,12 +275,6 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         return result;
     }
-
-    [GeneratedRegex(":.*VSTEST.*:")]
-    private static partial Regex HasTestExpr();
-
-    [GeneratedRegex("Failed:.*Passed:.*Skipped:.*Total:.*")]
-    private static partial Regex HasTestSummaryExpr();
 
     public class RetestSettings : CommandSettings
     {
