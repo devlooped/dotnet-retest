@@ -278,6 +278,10 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
     public class RetestSettings : CommandSettings
     {
+        [Description("Prints version information")]
+        [CommandOption("--version")]
+        public bool Version { get; init; }
+
         [Description("Maximum retries when re-running failed tests")]
         [CommandOption("--retries")]
         [DefaultValue(3)]

@@ -29,7 +29,6 @@ app.Configure(config =>
 {
     config.SetHelpProvider(new Helper(config.Settings));
     config.SetApplicationName("dotnet retest");
-    config.SetApplicationVersion(ThisAssembly.Project.Version);
 
     if (Environment.GetEnvironmentVariables().Contains("NO_COLOR") &&
         config.Settings.HelpProviderStyles?.Options is { } options)
