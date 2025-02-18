@@ -73,6 +73,8 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
             Verbosity = settings.Verbosity,
             GitHubComment = settings.GitHubComment,
             GitHubSummary = settings.GitHubSummary,
+            Skipped = settings.Skipped,
+            Recursive = false,
         };
 
         if (trx.Validate() is { Successful: false } result)
@@ -201,15 +203,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
 
         if (settings.NoSummary != true && Directory.Exists(trx.Path))
         {
-            new TrxCommand().Execute(context, new TrxCommand.TrxSettings
-            {
-                GitHubComment = settings.GitHubComment,
-                GitHubSummary = settings.GitHubSummary,
-                Output = settings.Output,
-                Path = trx.Path,
-                Skipped = settings.Skipped,
-                Recursive = false,
-            });
+            new TrxCommand().Execute(context, trx);
         }
 
         return exitCode;
