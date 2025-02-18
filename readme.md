@@ -43,7 +43,7 @@ USAGE:
 OPTIONS:
                         DEFAULT                                                 
     -h, --help                     Prints help information                      
-    -v, --version                  Prints version information                   
+        --version                  Prints version information                   
         --retries       3          Maximum retries when re-running failed tests 
         --no-summary               Whether to emit a summary to console/GitHub  
         --output                   Include test output in report                
