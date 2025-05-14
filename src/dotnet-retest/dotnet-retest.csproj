@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <RootNamespace>Devlooped</RootNamespace>
     <AssemblyName>retest</AssemblyName>
     <NoWarn>CS9107</NoWarn>
@@ -39,9 +39,9 @@
     <ProjectProperty Include="PackageProjectUrl" />
   </ItemGroup>
 
-  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true'">
+  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true' And $(TargetFramework) == 'net8.0'">
     <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="help.md" />
-    <Exec Command="dotnet run --no-build --no-launch-profile -- --help &gt;&gt; help.md" StdOutEncoding="UTF-8"
+    <Exec Command="dotnet run --no-build --no-launch-profile --framework $(TargetFramework) -- --help &gt;&gt; help.md" StdOutEncoding="UTF-8"
           EnvironmentVariables="NO_COLOR=true" />
     <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="help.md" />
   </Target>
