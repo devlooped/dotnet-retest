@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.7.2](https://github.com/devlooped/dotnet-retest/tree/v0.7.2) (2025-07-30)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.7.1...v0.7.2)
+
+:sparkles: Implemented enhancements:
+
+- Allow running on latest & greatest installed [\#93](https://github.com/devlooped/dotnet-retest/pull/93) (@kzu)
+
 ## [v0.7.1](https://github.com/devlooped/dotnet-retest/tree/v0.7.1) (2025-03-02)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.7.0...v0.7.1)
