@@ -31,6 +31,7 @@
     <PackageReference Include="NuGetizer" Version="1.2.4" />
     <PackageReference Include="NuGet.Protocol" Version="6.13.1" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-rc.1.25451.107" />
     <PackageReference Include="ThisAssembly.Git" Version="2.0.12" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly.Project" Version="2.0.12" PrivateAssets="all" />
   </ItemGroup>
@@ -47,8 +48,7 @@
 
   <Target Name="RenderHelp" AfterTargets="Build" Condition="$(NoHelp) != 'true' and $(DesignTimeBuild) != 'true'">
     <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="help.md" />
-    <Exec Command="dotnet run --no-build --no-launch-profile -- --help &gt;&gt; help.md" StdOutEncoding="UTF-8"
-          EnvironmentVariables="NO_COLOR=true" />
+    <Exec Command="dotnet run --no-build --no-launch-profile -- --help &gt;&gt; help.md" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" />
     <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="help.md" />
   </Target>
 

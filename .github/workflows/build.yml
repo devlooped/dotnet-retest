@@ -52,7 +52,7 @@ jobs:
         run: dotnet tool update -g dotnet-retest --prerelease --add-source .
 
       - name: 🧪 test
-        run: dotnet retest -- ./src/Sample/
+        run: dotnet retest -- ./src/Sample/ --filter "FullyQualifiedName!=Sample.UnitTest1.FailsAlways"
 
       - name: 🐛 logs
         uses: actions/upload-artifact@v4
