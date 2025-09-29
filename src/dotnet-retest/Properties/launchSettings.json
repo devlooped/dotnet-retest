@@ -3,7 +3,7 @@
     "dotnet-retest": {
       "commandName": "Project",
       "commandLineArgs": "-- --filter \"FullyQualifiedName!=Sample.UnitTest1.FailsAlways\"",
-      "workingDirectory": "..\\Sample"
+      "workingDirectory": "..\\Sample2"
     }
   }
 }
