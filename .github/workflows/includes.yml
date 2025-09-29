@@ -47,7 +47,7 @@ jobs:
             exit 1
           }
           
-          (get-content -raw $file) -replace '\$product\$',$product | set-content $file
+          ((get-content -raw $file) -replace '\$product\$',$product).trim() | set-content $file
 
       - name: ✍ pull request
         uses: peter-evans/create-pull-request@v6
