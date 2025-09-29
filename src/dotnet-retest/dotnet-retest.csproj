@@ -10,9 +10,11 @@
 
     <PackageId>dotnet-retest</PackageId>
     <ToolCommandName>dotnet-retest</ToolCommandName>
-    <PackAsTool>true</PackAsTool>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageTags>dotnet dotnet-tool</PackageTags>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>OSMFEULA.txt</PackageLicenseFile>
+    <PackAsTool>true</PackAsTool>
 
     <BuildDate>$([System.DateTime]::Now.ToString("yyyy-MM-dd"))</BuildDate>
     <BuildRef>$(GITHUB_REF_NAME)</BuildRef>
@@ -40,9 +42,10 @@
     <ProjectProperty Include="PackageId" />
     <ProjectProperty Include="PackageVersion" />
     <ProjectProperty Include="PackageProjectUrl" />
+    <None Include="..\..\osmfeula.txt" Link="osmfeula.txt" Pack="true" PackagePath="OSMFEULA.txt" />
   </ItemGroup>
 
-  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true'">
+  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(NoHelp) != 'true' and $(DesignTimeBuild) != 'true'">
     <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="help.md" />
     <Exec Command="dotnet run --no-build --no-launch-profile -- --help &gt;&gt; help.md" StdOutEncoding="UTF-8"
           EnvironmentVariables="NO_COLOR=true" />
