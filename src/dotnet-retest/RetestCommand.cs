@@ -15,6 +15,7 @@ using NuGet.Packaging;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;
+using static System.Net.Mime.MediaTypeNames;
 using static Devlooped.TrxCommand;
 using static Spectre.Console.AnsiConsole;
 
@@ -192,6 +193,12 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                 finally
                 {
                     task.StopTask();
+                }
+
+                if (settings.Verbosity == Verbosity.Verbose)
+                {
+                    foreach (var test in failed)
+                        MarkupLine($"\t:cross_mark: #{attempts} {test}");
                 }
             }
         });
