@@ -2,6 +2,12 @@ namespace Sample;
 
 public class UnitTest1
 {
+    [Fact]
+    public void FailsAlways()
+    {
+        throw new InvalidOperationException("Always fails");
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]

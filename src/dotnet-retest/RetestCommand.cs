@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -147,7 +148,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
                         ctx.Refresh();
                     }
 
-                    var exit = await RunTestsAsync(DotnetMuxer.Path.FullName, new List<string>(args), failed, new Progress<string>(line =>
+                    var exit = await RunTestsAsync(DotnetMuxer.Path.FullName, [.. args], failed, new Progress<string>(line =>
                     {
                         if (ci)
                         {
@@ -247,14 +248,26 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
         return outcomes;
     }
 
+    static readonly RootCommand command = new()
+    {
+        Options =
+        {
+            new Option<string>("--filter")
+        }
+    };
+
     async Task<BufferedCommandResult> RunTestsAsync(string dotnet, List<string> args, IEnumerable<string> failed, IProgress<string> progress)
     {
-        var testArgs = string.Join(" ", args);
         var finalArgs = args;
         var filter = string.Join('|', failed.Select(failed => $"FullyQualifiedName~{failed}"));
         if (filter.Length > 0)
         {
-            testArgs = $"--filter \"{filter}\" {testArgs}";
+            var parsed = command.Parse(args);
+            if (parsed.GetValue<string>("--filter") is { } existing)
+            {
+                finalArgs = [.. parsed.UnmatchedTokens];
+                filter = $"({existing})&({filter})";
+            }
             finalArgs.InsertRange(0, ["--filter", filter]);
         }
 

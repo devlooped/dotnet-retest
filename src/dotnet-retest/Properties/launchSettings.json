@@ -2,7 +2,7 @@
   "profiles": {
     "dotnet-retest": {
       "commandName": "Project",
-      "commandLineArgs": "",
+      "commandLineArgs": "-- --filter \"FullyQualifiedName!=Sample.UnitTest1.FailsAlways\"",
       "workingDirectory": "..\\Sample"
     }
   }
