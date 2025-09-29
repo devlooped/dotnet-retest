@@ -1,5 +1,29 @@
 # Changelog
 
+## [v1.0.0-beta](https://github.com/devlooped/dotnet-retest/tree/v1.0.0-beta) (2025-09-29)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.7.2...v1.0.0-beta)
+
+:sparkles: Implemented enhancements:
+
+- Render failing tests in verbose setting [\#98](https://github.com/devlooped/dotnet-retest/pull/98) (@kzu)
+- Improve escaping sequences in test filters [\#97](https://github.com/devlooped/dotnet-retest/pull/97) (@kzu)
+- Add support for pre-filtered lists of retest runs [\#96](https://github.com/devlooped/dotnet-retest/pull/96) (@kzu)
+
+:bug: Fixed bugs:
+
+- Command --filter "FullyQualifiedName!=TestProject1.UnitTest1.Test1" breaks the retry [\#91](https://github.com/devlooped/dotnet-retest/issues/91)
+- Paramterized tests fail to rerun if they contain a comma [\#89](https://github.com/devlooped/dotnet-retest/issues/89)
+
+:hammer: Other:
+
+- DotNet 9 support [\#87](https://github.com/devlooped/dotnet-retest/issues/87)
+- Feature request: more verbosity maybe? [\#86](https://github.com/devlooped/dotnet-retest/issues/86)
+
+:twisted_rightwards_arrows: Merged:
+
+- Fix unattended execution check [\#99](https://github.com/devlooped/dotnet-retest/pull/99) (@kzu)
+
 ## [v0.7.2](https://github.com/devlooped/dotnet-retest/tree/v0.7.2) (2025-07-30)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v0.7.1...v0.7.2)
