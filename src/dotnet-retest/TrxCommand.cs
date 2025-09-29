@@ -265,6 +265,7 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
             {
                 // Send workflow commands for each failure to be annotated in GH CI
                 // TODO: somehow the notice does not end up pointing to the right file/line
+                // TODO: we should do newline replacement with "%0A" here too
                 //foreach (var failure in failures)
                 //    WriteLine($"::error file={failure.File},line={failure.Line},title={failure.Title}::{failure.Message}");
             }
@@ -317,7 +318,8 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
 
         // Some day, it might just show-up and we'd be forwards compatible. 
         // See https://github.com/orgs/community/discussions/129314 and https://github.com/actions/runner/issues/324
-        var jobId = Environment.GetEnvironmentVariable("GITHUB_JOB_ID");
+        // Pending PR that introduces this envvar: https://github.com/actions/runner/pull/4053
+        var jobId = Environment.GetEnvironmentVariable("JOB_CHECK_RUN_ID");
 
         // Provide a mechanism that would work on matrix in the meantime
         if (Environment.GetEnvironmentVariable("GH_JOB_NAME") is { Length: > 0 } ghJobName)
@@ -333,7 +335,7 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
         long commentId = 0;
 
         if (jobUrl == null && TryExecute("gh",
-            ["api", $"repos/devlooped/dotnet-trx/actions/runs/{runId}/jobs", "--jq", $"[.jobs[] | select(.name == \"{jobName}\") | .id]"],
+            ["api", $"repos/{repo}/actions/runs/{runId}/jobs", "--jq", $"[.jobs[] | select(.name == \"{jobName}\") | .id]"],
             out var jobsJson) && jobsJson != null && JsonSerializer.Deserialize<long[]>(jobsJson) is { Length: 1 } jobIds)
         {
             jobUrl = $"{serverUrl}/{repo}/actions/runs/{runId}/job/{jobIds[0]}?pr={pr}";
@@ -460,6 +462,9 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
         else
             details.AppendLine("csharp");
 
+        // First line should be the actual error message.
+        details.AppendLineIndented(message.ReplaceLineEndings(), "> ");
+
         foreach (var line in lines.Select(x => x.EscapeMarkup()))
         {
             var match = ParseFile().Match(line);
@@ -479,8 +484,8 @@ public partial class TrxCommand : Command<TrxCommand.TrxSettings>
             // NOTE: we replace whichever was last, since we want the annotation on the 
             // last one with a filename, which will be the test itself (see previous skip from last found).
             failed = new Failed(testName,
-                message.ReplaceLineEndings().Replace(Environment.NewLine, "%0A"),
-                stackTrace.ReplaceLineEndings().Replace(Environment.NewLine, "%0A"),
+                message.ReplaceLineEndings(),
+                stackTrace.ReplaceLineEndings(),
                 relative, int.Parse(pos));
 
             cli.AppendLine(line.Replace(file, $"[link={file}][steelblue1_1]{relative}[/][/]"));
