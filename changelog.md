@@ -19,6 +19,7 @@
 
 - DotNet 9 support [\#87](https://github.com/devlooped/dotnet-retest/issues/87)
 - Feature request: more verbosity maybe? [\#86](https://github.com/devlooped/dotnet-retest/issues/86)
+- Is the unattended check correct? [\#80](https://github.com/devlooped/dotnet-retest/issues/80)
 
 :twisted_rightwards_arrows: Merged:
 
