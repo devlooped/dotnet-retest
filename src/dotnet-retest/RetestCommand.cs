@@ -259,7 +259,7 @@ public partial class RetestCommand : AsyncCommand<RetestCommand.RetestSettings>
     async Task<BufferedCommandResult> RunTestsAsync(string dotnet, List<string> args, IEnumerable<string> failed, IProgress<string> progress)
     {
         var finalArgs = args;
-        var filter = string.Join('|', failed.Select(failed => $"FullyQualifiedName~{failed}"));
+        var filter = string.Join('|', failed.Select(failed => $"FullyQualifiedName~{failed.Replace("\"", "%22").Replace(",", "%2C").Replace("(", "\\(").Replace(")", "\\)")}"));
         if (filter.Length > 0)
         {
             var parsed = command.Parse(args);

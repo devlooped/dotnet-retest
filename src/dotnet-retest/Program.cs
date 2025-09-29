@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Devlooped;
@@ -12,6 +14,9 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Help;
 using Spectre.Console.Rendering;
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    Console.InputEncoding = Console.OutputEncoding = Encoding.UTF8;
 
 var app = new CommandApp<RetestCommand>();
 
