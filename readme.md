@@ -20,7 +20,7 @@ and timing and outcome for each attempt:
 
 ![Demo](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/timings.png)
 
-Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]` (with optional `--attempts` which defaults to `3`):
+Typical usage: `dotnet retest [OPTIONS] [-- [dotnet test options]]`:
 
 ```yml
     - name: 🧪 test
