@@ -31,7 +31,7 @@
     <PackageReference Include="NuGetizer" Version="1.2.4" />
     <PackageReference Include="NuGet.Protocol" Version="6.13.1" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.51.1" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-rc.1.25451.107" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-rc.2.25502.107" />
     <PackageReference Include="ThisAssembly.Git" Version="2.0.14" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly.Project" Version="2.0.14" PrivateAssets="all" />
   </ItemGroup>
