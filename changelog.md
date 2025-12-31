@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.1.0-beta](https://github.com/devlooped/dotnet-retest/tree/v1.1.0-beta) (2025-12-31)
+
+[Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v1.0.0...v1.1.0-beta)
+
+:sparkles: Implemented enhancements:
+
+- Rename to retest for easier dnx execution [\#118](https://github.com/devlooped/dotnet-retest/pull/118) (@kzu)
+
 ## [v1.0.0](https://github.com/devlooped/dotnet-retest/tree/v1.0.0) (2025-09-30)
 
 [Full Changelog](https://github.com/devlooped/dotnet-retest/compare/v1.0.0-beta...v1.0.0)
