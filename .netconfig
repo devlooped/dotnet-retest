@@ -93,17 +93,17 @@
 	sha = 4339749ef4b8f66def75931df09ef99c149f8421
 	etag = 8b4492765755c030c4c351e058a92f53ab493cab440c1c0ef431f6635c4dae0e
 	weak
-[file "src/dotnet-retest/TrxCommand.cs"]
+[file "src/Retest/TrxCommand.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/TrxCommand.cs
 	sha = 9797acb675002234920073d5822fb500de672bf3
 	etag = 85984491f45c937ed82872a9efd39e6d2fd4d5eb437862578cf84184981d87f7
 	weak
-[file "src/dotnet-retest/Process.cs"]
+[file "src/Retest/Process.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/Process.cs
 	sha = 8385c4a7355e472f4a94939a5da5ea47cc43b4a3
 	etag = d36430441b9b7d4f444707afb6434665c4a38204da5fab6ca298cd8382b9d684
 	weak
-[file "src/dotnet-retest/Extensions.cs"]
+[file "src/Retest/Extensions.cs"]
 	url = https://github.com/devlooped/dotnet-trx/blob/main/src/dotnet-trx/Extensions.cs
 	sha = 59102327ff8db52de1d7487d53e6bfef5891b5cd
 	etag = 422d00a9218315f8f53d34a3a16d4cd1001fe71042bc9e04cd5439f62f3cce0b
