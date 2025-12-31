@@ -10,6 +10,8 @@
 Runs `dotnet test` with retries for failed tests automatically, and pretty-prints aggregated 
 test results, integrating also with GitHub PR comments just like [dotnet-trx](https://github.com/devlooped/dotnet-trx).
 
+Install latest and run with a single command: `dnx retest`.
+
 ![Demo](https://raw.githubusercontent.com/devlooped/dotnet-retest/main/assets/img/ciretry.png)
 
 When running locally, it provides live progress on each run:
@@ -35,7 +37,7 @@ PR comment integration:
 
 > NOTE: this behavior is triggered by the presence of the `GITHUB_REF_NAME` and `CI` environment variables.
 
-<!-- include src/dotnet-retest/help.md -->
+<!-- include src/Retest/help.md -->
 ```shell
 USAGE:
     dotnet retest [OPTIONS] [-- [dotnet test options]]
@@ -57,22 +59,28 @@ OPTIONS:
         --gh-summary    True       Report as GitHub step summary                
 ```
 
-<!-- src/dotnet-retest/help.md -->
+<!-- src/Retest/help.md -->
 
 > NOTE: rendering the passed tests requires `verbose` verbosity, since typically 
 > you'll just want to see the failed tests in the report, especially in projects with 
 > large number of tests.
 
+Install and Run latest:
+
+```shell
+dnx retest
+```
+
 Install:
 
 ```shell
-dotnet tool install -g dotnet-retest
+dotnet tool install -g retest
 ```
 
 Update:
 
 ```shell
-dotnet tool update -g dotnet-retest
+dotnet tool update -g retest
 ```
 
 <!-- #content -->
