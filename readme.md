@@ -1,8 +1,8 @@
 ![Icon](assets/32.png) dotnet retest
 ============
 
-[![Version](https://img.shields.io/nuget/v/dotnet-retest?color=royalblue)](https://www.nuget.org/packages/dotnet-retest)
-[![Downloads](https://img.shields.io/nuget/dt/dotnet-retest)](https://www.nuget.org/packages/dotnet-retest)
+[![Version](https://img.shields.io/nuget/v/retest?color=royalblue)](https://www.nuget.org/packages/retest)
+[![Downloads](https://img.shields.io/nuget/dt/retest)](https://www.nuget.org/packages/retest)
 [![License](https://img.shields.io/github/license/devlooped/dotnet-retest?color=blue)](https://github.com//devlooped/dotnet-retest/blob/main/license.txt)
 [![Build](https://img.shields.io/github/actions/workflow/status/devlooped/dotnet-retest/build.yml?branch=main)](https://github.com/devlooped/dotnet-retest/actions)
 
